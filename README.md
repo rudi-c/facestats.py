@@ -17,3 +17,7 @@ pip install beautifulsoup4
 ```
 python fbstats.py <directory of your fb data>/html/messages.htm
 ```
+
+# Ideas
+
+See https://dynalist.io/d/wuhWHlISJ3kV1bEF_YWatgQa
