@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from message import read_message
@@ -22,6 +23,29 @@ class MessageThread:
                    for author, (msg_count, word_count)
                    in counts.iteritems() }
         return counts
+
+    def message_blocks(self):
+        assert len(self.messages) > 0
+
+        blocks = []
+        current_block = []
+        last_message_time = None
+        for message in self.messages:
+            if last_message_time:
+                assert len(current_block) > 0
+                if message.time > last_message_time + datetime.timedelta(hours=3):
+                    blocks.append(current_block)
+                    current_block = [message]
+                else:
+                    current_block.append(message)
+            else:
+                current_block.append(message)
+            last_message_time = message.time
+
+        assert len(current_block) > 0
+        blocks.append(current_block)
+
+        return blocks
 
 def read_message_thread(full_name, thread_node):
     people = thread_node.find(text=True, recursive=False).strip().split(", ")

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import collections
 import sys
 
 from bs4 import BeautifulSoup
@@ -9,6 +10,25 @@ def get_soup(filename):
     f = open(filename, 'r')
     contents = f.read()
     return BeautifulSoup(contents, 'lxml')
+
+def thread_statistics(thread):
+    print "[In conversation with %s]" % thread.name
+    for author, (msg_count, word_count, words_per_msg) in thread.tally_messages().iteritems():
+        print ("    %s: (%d messages, %d words, %.1f words/message)" %
+               (author, msg_count, word_count, words_per_msg))
+
+    blocks = thread.message_blocks()
+    block_sizes = [len(block) for block in blocks]
+    median_size = block_sizes[len(block_sizes)/2]
+    print ("    Total of %d message blocks, median of %d messages" %
+           (len(blocks), median_size))
+
+    block_starters = [block[0].author for block in blocks]
+    starter_counts = collections.Counter(block_starters)
+
+    for author, count in starter_counts.iteritems():
+        print ("    Conversations started by %s: %d (%.0f%%)" %
+               (author, count, float(count) / len(blocks) * 100))
 
 def main(argv):
     print "Reading message history..."
@@ -27,10 +47,7 @@ def main(argv):
     threads = sorted(threads, key=lambda thread: len(thread.messages))
 
     for thread in threads:
-        print "[In conversation with %s]" % thread.name
-        for name, (msg_count, word_count, words_per_msg) in thread.tally_messages().iteritems():
-            print ("    %s: (%d messages, %d words, %.1f words/message)" %
-                   (name, msg_count, word_count, words_per_msg))
+        thread_statistics(thread)
 
     # print soup.prettify(encoding='utf-8')
 
