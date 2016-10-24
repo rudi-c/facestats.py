@@ -59,8 +59,8 @@ def read_message_thread(full_name, thread_node):
         return
 
     if len(people) == 0:
-        # TODO: Can this happen?
-        raise Error("Nobody but yourself is in this conversation!")
+        # Nobody but yourself is in this conversation!
+        return
     elif len(people) > 1:
         # TODO: Handle group conversations
         return
