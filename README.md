@@ -10,6 +10,8 @@ This is a lightweight Python script. First, make sure you have Python 2 and `pip
 pip install beautifulsoup4
 ```
 
+If your system complains about lxml missing, some combination of the following packages may work: `python-dev libxml2 libxml2-dev libxslt-dev python-lxml`
+
 # Usage
 
 [Download a copy of your Facebook data.](https://www.facebook.com/settings). Unzip, then run
